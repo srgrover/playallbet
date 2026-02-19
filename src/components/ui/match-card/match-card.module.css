@@ -1,0 +1,108 @@
+.btn--submit {
+    box-shadow: rgb(198, 107, 47) 0px 4px;
+    background: rgb(247, 134, 59);
+}
+.btn--huge {
+    font-size: 1.125em;
+    padding: 1em 2.5em;
+}
+.btn {
+    display: inline-block;
+    vertical-align: middle;
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: bold;
+    line-height: normal;
+    cursor: pointer;
+    background-color: rgb(33, 164, 216);
+    position: relative;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    user-select: none;
+    box-shadow: rgb(27, 135, 179) 0px 4px;
+    white-space: nowrap;
+    margin: 0px 0px 4px;
+    border-radius: 12px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    padding: 0.8em 1.25em;
+}
+
+.btn--submit:hover {
+    color: rgb(255, 255, 255);
+    top: 2px;
+    box-shadow: rgb(198, 107, 47) 0px 2px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    color: rgb(255, 255, 255);
+    top: 2px;
+    box-shadow: rgb(27, 135, 179) 0px 2px;
+    text-decoration: none;
+}
+
+.btn--submit.pressed, .btn--submit:active {
+    color: rgb(255, 255, 255);
+    top: 4px;
+    box-shadow: rgb(198, 107, 47) 0px 2px inset;
+}
+
+.btn--submit:hover {
+    color: rgb(255, 255, 255);
+    top: 2px;
+    box-shadow: rgb(198, 107, 47) 0px 2px;
+    text-decoration: none;
+}
+
+.btn.pressed, .btn:active {
+    color: rgb(255, 255, 255);
+    top: 4px;
+    box-shadow: rgb(27, 135, 179) 0px 2px inset;
+}
+
+/*bg--football*/
+.bg--01 {
+    background: rgb(153, 209, 92);
+}
+
+/*bg--basketball*/
+.bg--02 {
+    background: rgb(254, 123, 73);
+}
+
+/*bg--tennis*/
+.bg--04 {
+    background: rgb(255, 195, 49);
+}
+
+/*bg--handball*/
+.bg--03 {
+    background: rgb(143, 121, 196);
+}
+
+.bg--others {
+    background: rgb(49, 191, 207);
+}
+
+.border--football {
+    border: 3px solid rgb(99, 136, 60);
+}
+
+
+.border--b--football {
+    border-bottom: 3px solid rgb(99, 136, 60);
+}
+
+.border--t--football {
+    border-top: 3px solid rgb(99, 136, 60);
+}
+
+.border--card--football {
+    border-top: 3px solid rgb(99, 136, 60);
+    border-right: 3px solid rgb(99, 136, 60);
+    border-bottom: 0;
+    border-left: 3px solid rgb(99, 136, 60);
+}

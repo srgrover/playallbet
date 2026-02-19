@@ -122,16 +122,16 @@ a.secondary {
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   .logo {
     filter: invert();
   }
 
   .page {
-    --background: #000;
+    --background: #FFF;
     --foreground: #000;
 
-    --text-primary: #ededed;
+    --text-primary: #222;
     --text-secondary: #999;
 
     --button-primary-hover: #ccc;
