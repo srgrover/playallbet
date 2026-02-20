@@ -45,7 +45,7 @@
     box-shadow: rgb(27, 135, 179) 0px 4px;
     white-space: nowrap;
     margin: 0px 0px 4px;
-    border-radius: 12px;
+    border-radius: 8px;
     border-width: initial;
     border-style: none;
     border-color: initial;
@@ -89,7 +89,7 @@
 .btn--bet--success {
     background-color: rgb(56, 199, 144);
     border-color: rgb(28, 100, 72);;
-    border-radius: 12px;
+    border-radius: 8px;
     border-style: solid;
     border-width: 1.6px 1.6px 8px;
     color: #fff;

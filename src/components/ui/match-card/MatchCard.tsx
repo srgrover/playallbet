@@ -29,7 +29,7 @@ export const MatchCard = ({ event }: Props) => {
     };
 
     return (
-        <div className={`flex flex-col justify-between ${styles[`bg--${event.sport.id}`]} ${styles['border--football']} rounded-t-[12px] rounded-b-[14px]`}>
+        <div className={`flex flex-col justify-between ${styles[`bg--${event.sport.id}`]} ${styles[`border--${event.sport.id}`]} rounded-t-[8px] rounded-b-[10px]`}>
             <div key={event.id} className={`p-5`}>
                 <div className="grid grid-cols-1 justify-between items-center">
                     <span className="text-xs text-white font-bold">
@@ -95,7 +95,7 @@ export const MatchCard = ({ event }: Props) => {
             </div>
             <div className="flex justify-center items-center flex-wrap">
                 {
-                    <BrandButton text={event.sportEvent.status.id !== 0 ? "TERMINADO" : 'JUGAR'} color="orange" customClass={`w-full rounded-t-[0px]! ${styles['border--t--football']}`} disabled={event.sportEvent.status.id !== 0} />
+                    <BrandButton text={event.sportEvent.status.id !== 0 ? "TERMINADO" : 'JUGAR'} color="orange" customClass={`w-full rounded-t-[0px]! ${styles[`border--t--${event.sport.id}`]}`} disabled={event.sportEvent.status.id !== 0} />
                 }
             </div>
         </div>
