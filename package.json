@@ -16,9 +16,11 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@prisma/client": "^7.4.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "prisma": "^7.4.1",
     "typescript": "^5.9.3"
   }
 }
