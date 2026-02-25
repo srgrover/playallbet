@@ -1,4 +1,4 @@
-/* -- Football -- */
+/* Football - 01 */
 .bg--01 {
     background: rgb(153, 209, 92);
 }
@@ -22,7 +22,7 @@
 /**********************/
 
 
-/* -- Basketball -- */
+/* Basketball - 02 */
 .bg--02 {
     background: rgb(254, 123, 73);
 }
@@ -45,17 +45,18 @@
 }
 /**********************/
 
-/*bg--tennis*/
-.bg--04 {
-    background: rgb(255, 195, 49);
-}
-
-/*bg--handball*/
+/* Handball - 03 */
 .bg--03 {
     background: rgb(143, 121, 196);
 }
 
-.bg--others {
+/* Tennis - 04 */
+.bg--04 {
+    background: rgb(255, 195, 49);
+}
+
+/* Football sala - 07 */
+.bg--07 {
     background: rgb(49, 191, 207);
 }
 

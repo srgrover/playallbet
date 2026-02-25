@@ -1,0 +1,71 @@
+/* Football - 01 */
+.bg--01 {
+    background: rgb(153, 209, 92);
+}
+.border--01 {
+    border: 3px solid rgb(99, 136, 60);
+}
+.border--b--01 {
+    border-bottom: 3px solid rgb(99, 136, 60);
+}
+
+.border--t--01 {
+    border-top: 3px solid rgb(99, 136, 60);
+}
+
+.border--card--01 {
+    border-top: 3px solid rgb(99, 136, 60);
+    border-right: 3px solid rgb(99, 136, 60);
+    border-bottom: 0;
+    border-left: 3px solid rgb(99, 136, 60);
+}
+/**********************/
+
+
+/* Basketball - 02 */
+.bg--02 {
+    background: rgb(254, 123, 73);
+}
+.border--02 {
+    border: 3px solid rgb(198, 107, 47);
+}
+.border--b--02 {
+    border-bottom: 3px solid rgb(198, 107, 47);
+}
+
+.border--t--02 {
+    border-top: 3px solid rgb(198, 107, 47);
+}
+
+.border--card--02 {
+    border-top: 3px solid rgb(198, 107, 47);
+    border-right: 3px solid rgb(198, 107, 47);
+    border-bottom: 0;
+    border-left: 3px solid rgb(198, 107, 47);
+}
+/**********************/
+
+/* Handball - 03 */
+.bg--03 {
+    background: rgb(143, 121, 196);
+}
+
+/* Tennis - 04 */
+.bg--04 {
+    background: rgb(255, 195, 49);
+}
+
+/* Football sala - 07 */
+.bg--07 {
+    background: rgb(49, 191, 207);
+}
+
+/* -- Button to play -- */
+.button--primary--alternative {
+    border: 3px solid var(--brand-main-color);
+    color: var(--brand-main-color);
+    cursor: pointer;
+}
+
+
+
