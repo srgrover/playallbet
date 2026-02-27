@@ -30,3 +30,19 @@ export async function getEventById(id: number) {
 
   return response;
 }
+
+
+export async function getEventOddsById(id: number) {
+  const url_sofascore = `https://www.fotmob.com/api/data/matchOdds?matchId=${id}&ccode3=ESP&bettingProvider=Bet365_Spain`
+  const headers = new Headers();
+  headers.append('user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36');
+  headers.append('referer', 'https://www.sofascore.com/es-la/');
+
+  const response = await fetch(url_sofascore, {
+    method: 'GET',
+    headers,
+    next: { revalidate: 60 } // Revalidate every 60 seconds
+  });
+
+  return response;
+}

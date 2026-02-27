@@ -9,3 +9,6 @@ export * from './ui/event-card/EventCard';
 export * from './ui/brand-button/BrandButton';
 // Image
 export * from './ui/competitor-image/CompetitorImage';
+
+export * from './ui/navbar/Navbar';
+
