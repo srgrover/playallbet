@@ -1,12 +1,12 @@
 import { BrandButton } from "../brand-button/BrandButton";
-import { MatchImage } from "../match-image/MatchImage";
+import { CompetitorImage } from "../competitor-image/CompetitorImage";
 import styles from './match-card.module.css';
 
 interface Props {
     event: any;
 }
 
-export const MatchCard = ({ event }: Props) => {
+export const EventCardAlternative = ({ event }: Props) => {
     const cardColors = ['bg-card-blue', 'bg-card-purple', 'bg-card-yellow'];
     const randomColor = cardColors[Math.floor(Math.random() * cardColors.length)];
 
@@ -29,7 +29,7 @@ export const MatchCard = ({ event }: Props) => {
     };
 
     return (
-        <div className={`flex flex-col justify-between ${styles[`bg--${event.sport.id}`]} ${styles['border--football']} rounded-t-[12px] rounded-b-[14px]`}>
+        <div className={`flex flex-col justify-between bg-white rounded-t-[8px] rounded-b-[10px]`}>
             <div key={event.id} className={`p-5`}>
                 <div className="grid grid-cols-1 justify-between items-center">
                     <span className="text-xs text-white font-bold">
@@ -54,18 +54,18 @@ export const MatchCard = ({ event }: Props) => {
                 <div className="grid grid-cols-1 justify-between items-center">
                     <div className="grid grid-cols-[1fr_auto] justify-between items-center gap-3">
                         <div className="flex justify-start items-center gap-3">
-                            <MatchImage 
+                            <CompetitorImage 
                                 src={event.sportEvent.competitors.homeTeam.imageUrlSizes.xs ?? event.sportEvent.competitors.homeTeam.imageUrl} 
                                 alt={event.sportEvent.competitors.homeTeam.fullName} 
                                 className="pixelated"
                             />
-                            <p className="font-extrabold text-2xl">{event.sportEvent.competitors.homeTeam.fullName}</p>
+                            <p className="font-raleway-black text-2xl">{event.sportEvent.competitors.homeTeam.fullName}</p>
                         </div>
 
                         <div className="flex justify-end items-center gap-3">
                             {
                                 event.sportEvent.status.id !== 0 
-                                ? <span className={`text-xl text-gray-500 text-center font-extrabold ${event.score?.homeTeam?.totalScore > event.score?.awayTeam?.totalScore ? 'text-gray-900' : ''}`}> {event.score?.homeTeam?.totalScore ?? ''} </span>
+                                ? <span className={`text-xl text-gray-500 text-center font-raleway-extrabold ${event.score?.homeTeam?.totalScore > event.score?.awayTeam?.totalScore ? 'text-gray-900' : ''}`}> {event.score?.homeTeam?.totalScore ?? ''} </span>
                                 : ''
                             }
                         </div>
@@ -73,18 +73,18 @@ export const MatchCard = ({ event }: Props) => {
 
                     <div className="grid grid-cols-[1fr_auto] justify-between items-center gap-3">
                         <div className="flex justify-start items-center gap-3">
-                            <MatchImage 
+                            <CompetitorImage 
                                 src={event.sportEvent.competitors.awayTeam.imageUrlSizes.xs ?? event.sportEvent.competitors.awayTeam.imageUrl} 
                                 alt={event.sportEvent.competitors.awayTeam.fullName}
                                 className="pixelated"
                             />
-                            <p className="font-extrabold text-2xl">{event.sportEvent.competitors.awayTeam.fullName}</p>
+                            <p className="font-raleway-black  text-2xl">{event.sportEvent.competitors.awayTeam.fullName}</p>
                         </div>
 
                         <div className="flex justify-end items-center gap-3">
                         {
                                 event.sportEvent.status.id !== 0 
-                                ? <span className={`text-xl text-gray-500 text-center font-extrabold ${event.score?.homeTeam?.totalScore < event.score?.awayTeam?.totalScore ? 'text-gray-900' : ''}`}> {event.score?.awayTeam?.totalScore ?? ''}</span>
+                                ? <span className={`text-xl text-gray-500 text-center font-raleway-extrabold ${event.score?.awayTeam?.totalScore > event.score?.homeTeam?.totalScore ? 'text-gray-900' : ''}`}> {event.score?.awayTeam?.totalScore ?? ''}</span>
                                 : ''
                             }
 
@@ -95,7 +95,7 @@ export const MatchCard = ({ event }: Props) => {
             </div>
             <div className="flex justify-center items-center flex-wrap">
                 {
-                    <BrandButton text={event.sportEvent.status.id !== 0 ? "TERMINADO" : 'JUGAR'} color="orange" customClass={`w-full rounded-t-[0px]! ${styles['border--t--football']}`} disabled={event.sportEvent.status.id !== 0} />
+                    <BrandButton text={event.sportEvent.status.id !== 0 ? "TERMINADO" : 'JUGAR'} color="primary" customClass={`w-full! rounded-t-[0px]!`} disabled={event.sportEvent.status.id === 2} />
                 }
             </div>
         </div>
