@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
-interface MatchImageProps {
+interface CompetitorImageProps {
   src: string;
   alt: string;
   className?: string;
 }
 
-export const MatchImage = ({ src, alt, className }: MatchImageProps) => {
+export const CompetitorImage = ({ src, alt, className }: CompetitorImageProps) => {
   // Usamos el SVG como fallback, que es más fiable
   const fallbackSrc = '/shield-default.svg';
 
@@ -25,9 +26,10 @@ export const MatchImage = ({ src, alt, className }: MatchImageProps) => {
   };
 
   return (
-    <img 
+    <Image 
       key={imgSrc} // Mantenemos la key para forzar el re-renderizado
       src={imgSrc || fallbackSrc}
+      alt={alt}
       width={35}
       height={35}
       className={`${className} pixelated-image`}

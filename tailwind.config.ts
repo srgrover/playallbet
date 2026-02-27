@@ -9,6 +9,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
       colors: {
         'playful-orange': '#f37f37',
         'playful-blue': '#36A9E1',

@@ -1,0 +1,27 @@
+'use server';
+
+import prisma from "@/lib/prisma";
+import { User } from "next-auth";
+
+export const createUser = async (user: User) => {
+  if (!user) {
+    return {
+      ok: false,
+      message: "There is no user to create.",
+    };
+  }
+
+  const userCreated = await prisma.user.create({
+    data: {
+      email: user.email,
+      name: user.name,
+      image: user.image,
+      password: ''
+    }
+  });
+
+  return {
+    ok: true,
+    user: userCreated
+  }
+}
