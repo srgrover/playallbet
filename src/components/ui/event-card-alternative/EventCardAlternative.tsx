@@ -1,14 +1,37 @@
-import { BrandButton } from "../brand-button/BrandButton";
+
+'use client';
+
+import { useState } from 'react';
+import type { Session } from 'next-auth';
+// import { placeBet } from '@/lib/actions';
 import { CompetitorImage } from "../competitor-image/CompetitorImage";
-import styles from './match-card.module.css';
+import styles from './event-card-alternative.module.css';
 
 interface Props {
     event: any;
+    session: Session | null;
 }
 
-export const EventCardAlternative = ({ event }: Props) => {
-    const cardColors = ['bg-card-blue', 'bg-card-purple', 'bg-card-yellow'];
-    const randomColor = cardColors[Math.floor(Math.random() * cardColors.length)];
+export const EventCardAlternative = ({ event, session }: Props) => {
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+
+    const handleBet = async (selection: 'home' | 'away' | 'draw') => {
+        setLoading(true);
+        setMessage('');
+        setError('');
+
+        // const result = await placeBet(event.id, selection);
+
+        // if (result.error) {
+        //     setError(result.error);
+        // } else {
+        //     setMessage(result.success || 'Apuesta realizada');
+        // }
+
+        setLoading(false);
+    };
 
     const getEventDate = (startDate: string) => {
         const eventDate = new Date(startDate);
@@ -28,76 +51,70 @@ export const EventCardAlternative = ({ event }: Props) => {
         }
     };
 
+    const isBettingDisabled = !session || event.sportEvent.status.id !== 0 || loading;
+
     return (
-        <div className={`flex flex-col justify-between bg-white rounded-t-[8px] rounded-b-[10px]`}>
-            <div key={event.id} className={`p-5`}>
-                <div className="grid grid-cols-1 justify-between items-center">
-                    <span className="text-xs text-white font-bold">
-                        {
-                            event.sportEvent.status.id === 0
-                                ? <p>{getEventDate(event.startDate)}</p>
-                                : <span>Finalizado</span>
-                        }
+        <div className={`flex flex-col justify-between bg-white rounded-lg shadow-md ${styles.card}`}>
+            <div className="p-5">
+                <div className="grid grid-cols-1 justify-between items-center mb-4">
+                    <span className="text-xs text-gray-500 font-bold">
+                        {event.sportEvent.status.id === 0 ? getEventDate(event.startDate) : <span>Finalizado</span>}
                     </span>
                 </div>
-                <div className="grid grid-cols-1 justify-start items-center gap-3">
-                    <span className="flex justify-start text-xs text-blue-400 font-bold items-center gap-2">
-                        <span>
-                            {event.sport.name} {event.sport.id}
-                        </span>
-                        <span className="font-extrabold">·</span>
 
+                <div className="grid grid-cols-1 justify-start items-center gap-1 mb-4">
+                    <span className="flex justify-start text-xs text-blue-400 font-bold items-center gap-2">
+                        <span>{event.sport.name}</span>
+                        <span className="font-extrabold">·</span>
                         <span>{event.tournament.name}</span>
                     </span>
                 </div>
 
-                <div className="grid grid-cols-1 justify-between items-center">
-                    <div className="grid grid-cols-[1fr_auto] justify-between items-center gap-3">
-                        <div className="flex justify-start items-center gap-3">
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
                             <CompetitorImage 
                                 src={event.sportEvent.competitors.homeTeam.imageUrlSizes.xs ?? event.sportEvent.competitors.homeTeam.imageUrl} 
                                 alt={event.sportEvent.competitors.homeTeam.fullName} 
-                                className="pixelated"
+                                className="pixelated" 
                             />
-                            <p className="font-raleway-black text-2xl">{event.sportEvent.competitors.homeTeam.fullName}</p>
+                            <p className="font-raleway-bold text-lg">{event.sportEvent.competitors.homeTeam.fullName}</p>
                         </div>
-
-                        <div className="flex justify-end items-center gap-3">
-                            {
-                                event.sportEvent.status.id !== 0 
-                                ? <span className={`text-xl text-gray-500 text-center font-raleway-extrabold ${event.score?.homeTeam?.totalScore > event.score?.awayTeam?.totalScore ? 'text-gray-900' : ''}`}> {event.score?.homeTeam?.totalScore ?? ''} </span>
-                                : ''
-                            }
-                        </div>
+                        {event.sportEvent.status.id !== 0 && <span className={`text-xl font-bold ${event.score?.homeTeam?.totalScore > event.score?.awayTeam?.totalScore ? 'text-gray-900' : 'text-gray-500'}`}> {event.score?.homeTeam?.totalScore ?? ''} </span>}
                     </div>
 
-                    <div className="grid grid-cols-[1fr_auto] justify-between items-center gap-3">
-                        <div className="flex justify-start items-center gap-3">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
                             <CompetitorImage 
                                 src={event.sportEvent.competitors.awayTeam.imageUrlSizes.xs ?? event.sportEvent.competitors.awayTeam.imageUrl} 
                                 alt={event.sportEvent.competitors.awayTeam.fullName}
                                 className="pixelated"
                             />
-                            <p className="font-raleway-black  text-2xl">{event.sportEvent.competitors.awayTeam.fullName}</p>
+                            <p className="font-raleway-bold text-lg">{event.sportEvent.competitors.awayTeam.fullName}</p>
                         </div>
-
-                        <div className="flex justify-end items-center gap-3">
-                        {
-                                event.sportEvent.status.id !== 0 
-                                ? <span className={`text-xl text-gray-500 text-center font-raleway-extrabold ${event.score?.awayTeam?.totalScore > event.score?.homeTeam?.totalScore ? 'text-gray-900' : ''}`}> {event.score?.awayTeam?.totalScore ?? ''}</span>
-                                : ''
-                            }
-
-                        </div>
+                        {event.sportEvent.status.id !== 0 && <span className={`text-xl font-bold ${event.score?.awayTeam?.totalScore > event.score?.homeTeam?.totalScore ? 'text-gray-900' : 'text-gray-500'}`}> {event.score?.awayTeam?.totalScore ?? ''}</span>}
                     </div>
                 </div>
-
             </div>
-            <div className="flex justify-center items-center flex-wrap">
-                {
-                    <BrandButton text={event.sportEvent.status.id !== 0 ? "TERMINADO" : 'JUGAR'} color="primary" customClass={`w-full! rounded-t-[0px]!`} disabled={event.sportEvent.status.id === 2} />
-                }
+
+            <div className="bg-gray-50 p-4 rounded-b-lg">
+                {session && event.sportEvent.status.id === 0 && (
+                    <div className="flex justify-around items-center">
+                        <button onClick={() => handleBet('home')} disabled={isBettingDisabled} className={`${styles.betButton} ${isBettingDisabled ? styles.disabled : ''}`}>Local</button>
+                        <button onClick={() => handleBet('draw')} disabled={isBettingDisabled} className={`${styles.betButton} ${isBettingDisabled ? styles.disabled : ''}`}>Empate</button>
+                        <button onClick={() => handleBet('away')} disabled={isBettingDisabled} className={`${styles.betButton} ${isBettingDisabled ? styles.disabled : ''}`}>Visitante</button>
+                    </div>
+                )}
+                {!session && event.sportEvent.status.id === 0 && (
+                    <p className="text-center text-sm text-gray-500">Inicia sesión para poder apostar</p>
+                )}
+                {event.sportEvent.status.id !== 0 && (
+                    <p className="text-center text-sm font-bold text-gray-600">Este partido ya ha finalizado</p>
+                )}
+                {loading && <p className="text-center text-sm text-blue-500">Realizando apuesta...</p>}
+                {message && <p className="text-center text-sm text-green-500">{message}</p>}
+                {error && <p className="text-center text-sm text-red-500">{error}</p>}
             </div>
         </div>
-    )
+    );
 }

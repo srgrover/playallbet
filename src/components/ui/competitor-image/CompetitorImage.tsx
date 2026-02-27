@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface CompetitorImageProps {
   src: string;
@@ -25,9 +26,10 @@ export const CompetitorImage = ({ src, alt, className }: CompetitorImageProps) =
   };
 
   return (
-    <img 
+    <Image 
       key={imgSrc} // Mantenemos la key para forzar el re-renderizado
       src={imgSrc || fallbackSrc}
+      alt={alt}
       width={35}
       height={35}
       className={`${className} pixelated-image`}

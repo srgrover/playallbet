@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { BrandButton } from "../brand-button/BrandButton";
 import { CompetitorImage } from "../competitor-image/CompetitorImage";
 import styles from './event-card.module.css';
+import { FaArrowRight } from "react-icons/fa6";
+import { getEventDateFormat } from "@/app/utils";
 
 interface Props {
     event: any;
@@ -9,31 +10,6 @@ interface Props {
 }
 
 export const EventCard = ({ event, tournament }: Props) => {
-    const getEventDate = (startDate: string) => {
-        const dateDot = startDate.split(' ')[0]
-        const dateSplit = dateDot.split('.')
-        const day = dateSplit[0]
-        const month = dateSplit[1]
-        const year = dateSplit[2]
-
-        const hour = startDate.split(' ')[1]
-        const eventDate = new Date(`${year}-${month}-${day}T${hour}`);
-        const today = new Date();
-        const tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-
-        const eventTime = eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-
-        if (eventDate.toDateString() === today.toDateString()) {
-            return `Hoy a las ${eventTime}`;
-        } else if (eventDate.toDateString() === tomorrow.toDateString()) {
-            return `Mañana a las ${eventTime}`;
-        } else {
-            const eventDay = eventDate.toLocaleDateString([], { day: 'numeric', month: 'long' });
-            return `El ${eventDay} a las ${eventTime}`;
-        }
-    };
-
     return (
         <div className={`flex flex-col justify-between bg-white shadow-xs`}>
             <div key={event.id} className={`p-5 grid grid-cols-2`}>
@@ -88,7 +64,7 @@ export const EventCard = ({ event, tournament }: Props) => {
                                             ? <span>En curso</span>
                                             : event.status.cancelled
                                                 ? <span>Cancelado</span>
-                                                : <p>{getEventDate(event.time)}</p>
+                                                : <p>{getEventDateFormat(event.time)}</p>
                                 }
                             </span>
                             <span className="font-raleway-black text-gray-400">·</span>
@@ -108,18 +84,10 @@ export const EventCard = ({ event, tournament }: Props) => {
                 <div className="flex justify-end items-end">
                     <Link href={`/event/${event.id}`} className={`flex justify-start gap-2 items-center border py-1 px-3 border-[] rounded-full font-raleway-bold ${styles['button--primary--alternative']}`}>
                         Juega
-                        <span className="material-symbols-outlined text-sm">
-                            arrow_forward
-                        </span>
+                        <FaArrowRight size={14} />
                     </Link>
-
                 </div>
             </div>
-            {/* <div className="flex justify-center items-center flex-wrap">
-                {
-                    <BrandButton text={event.status.finished || event.status.started ? "TERMINADO" : 'JUGAR'} color="primary" customClass={`w-full! rounded-t-[0px]!`} disabled={event.status.finished || event.status.started} />
-                }
-            </div> */}
         </div>
     )
 }
