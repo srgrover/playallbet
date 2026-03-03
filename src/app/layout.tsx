@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers/Providers";
 import { auth } from "@/auth";
-import { Navbar } from "@/components";
+import { Navbar, ProfileMenu } from "@/components";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "PlayAllbet - Apuestas Deportivas",
@@ -18,15 +19,16 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="es">
-      <body className={`bg-gray-100`}>
+    <html lang="es" className="min-h-full">
+      <body className={`bg-slate-100 min-h-full`}>
         <Providers session={ session }>
-          <main className="grid grid-cols-10">
-            <div className="min-h-full w-full bg-[#093b54]">
-              
-            </div>
-            <div className="col-span-9">
-              <Navbar />
+          <main className="grid grid-cols-10 min-h-full">
+            {
+              session?.user &&
+              <ProfileMenu user={ session.user } />
+            }
+            <div className={`${ session?.user ? 'col-span-9' : 'col-span-10'}` }>
+              <Navbar session={ session } />
               <main>{children}</main>
             </div>
           </main>

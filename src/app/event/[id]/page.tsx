@@ -8,6 +8,6 @@ export default async function Event({ params }: Props) {
   const { id } = await params;
 
   return (
-    <EventData eventId={ id } />
+    <EventData key={ id } eventId={ id } />
   );
 }
