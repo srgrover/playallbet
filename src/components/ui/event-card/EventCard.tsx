@@ -21,7 +21,7 @@ export const EventCard = ({ event, tournament }: Props) => {
                                     src={`https://images.fotmob.com/image_resources/logo/teamlogo/${event.home.id}_xsmall.png`}
                                     alt={event.home.name}
                                 />
-                                <p className="font-raleway-bold text-2xl">{event.home.name}</p>
+                                <p className="font-raleway-bold text-2xl text-gray-700">{event.home.name}</p>
                             </div>
                         </div>
 
@@ -45,7 +45,7 @@ export const EventCard = ({ event, tournament }: Props) => {
 
                         <div className="grid grid-cols-[1fr_auto] justify-between items-center">
                             <div className="flex justify-start items-center gap-3">
-                                <p className="font-raleway-bold text-2xl">{event.away.name}</p>
+                                <p className="font-raleway-bold text-2xl text-gray-700">{event.away.name}</p>
                                 <CompetitorImage
                                     src={`https://images.fotmob.com/image_resources/logo/teamlogo/${event.away.id}_xsmall.png`}
                                     alt={event.away.name}
@@ -82,10 +82,19 @@ export const EventCard = ({ event, tournament }: Props) => {
                 </div>
 
                 <div className="flex justify-end items-end">
-                    <Link href={`/event/${event.id}`} className={`flex justify-start gap-2 items-center border py-1 px-3 border-[] rounded-full font-raleway-bold ${styles['button--primary--alternative']}`}>
-                        Juega
+                    {
+                        event.status.finished || event.status.started
+                        ?<button className={`flex justify-start gap-2 items-center border py-1 px-3 rounded-full font-raleway-bold ${styles['button--primary--alternative']}`} disabled>
+                            Juega
+                            <FaArrowRight size={14} />
+                        </button>
+
+                        : <Link href={`/event/${event.id}`} className={`flex justify-start gap-2 items-center border py-1 px-3 rounded-full font-raleway-bold ${styles['button--primary--alternative']}`}>
+                            Juega
                         <FaArrowRight size={14} />
                     </Link>
+                    }
+                    
                 </div>
             </div>
         </div>

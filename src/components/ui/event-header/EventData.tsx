@@ -10,6 +10,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { FaCalendarAlt } from 'react-icons/fa';
 import { FaArrowLeft, FaTrophy } from 'react-icons/fa6';
+import { IoWarningOutline } from 'react-icons/io5';
+import { PlaceBetButton } from '../place-bet-button/PlaceBetButton';
+import { useSession } from 'next-auth/react';
+import { getUserByEmail } from '@/actions';
 
 interface Props {
     eventId: number
@@ -17,17 +21,18 @@ interface Props {
 
 export const EventData = ({ eventId }: Props) => {
     const [hasMounted, setHasMounted] = useState(false);
-    useEffect(() => {
-        setHasMounted(true);
-    }, []);
-
-    const event = useEventStore(state => state.getEventById(parseInt(eventId.toString())));
-    const eventLeagueFromStore = useEventStore(state => state.getLeagueByMatchId(parseInt(eventId.toString())));
     const [odds, setOdds] = useState<Selection[] | null>([]);
     const [loading, setLoading] = useState(true);
     const [finalized, setFinalized] = useState(false);
+    const [userCoins, setUserCoins] = useState(0);
 
-    console.log({ event })
+    const { data: session } = useSession();
+    const event = useEventStore(state => state.getEventById(parseInt(eventId.toString())));
+    const eventLeagueFromStore = useEventStore(state => state.getLeagueByMatchId(parseInt(eventId.toString())));
+
+    useEffect(() => {
+        setHasMounted(true);
+    }, []);
 
     useEffect(() => {
         const fetchOdds = async () => {
@@ -42,7 +47,6 @@ export const EventData = ({ eventId }: Props) => {
                         setFinalized(true);
                         setOdds(oddsResp?.odds.resolvedOddsMarket.selections);
                     }
-                    console.log({ oddsResp })
                 } else {
                     console.error("Failed to fetch odds:", res.status, await res.text());
                 }
@@ -58,6 +62,17 @@ export const EventData = ({ eventId }: Props) => {
         }
     }, [eventId, hasMounted]);
 
+    useEffect(() => {
+        const fetchUserCoins = async () => {
+            if (session?.user?.email) {
+                const user = await getUserByEmail(session.user.email);
+                setUserCoins(user.user?.coins ?? 0);
+            }
+        };
+
+        fetchUserCoins();
+    }, [session]);
+
     if (!hasMounted) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -65,7 +80,6 @@ export const EventData = ({ eventId }: Props) => {
             </div>
         );
     }
-
 
     if (!event) {
         return (
@@ -108,12 +122,10 @@ export const EventData = ({ eventId }: Props) => {
                             <span className="flex items-center gap-1">
                                 <FaCalendarAlt size={14} />
                                 {getEventDateFormat(event.time)}
-
                             </span>
                             <span>-</span>
                             <span className="flex items-center gap-1">
                                 <FaTrophy size={14} />
-                                {/* League name is not on the match object, so keeping this placeholder */}
                                 {eventLeagueFromStore?.name ?? ''}
                             </span>
                             <span>-</span>
@@ -138,21 +150,20 @@ export const EventData = ({ eventId }: Props) => {
                     <form action="" className="grid grid-cols-3 gap-4">
                         {
                             !loading && odds?.map((selection: any, index: number) => (
-                                <div key={index} className={`border border-gray-200 col-span-1 flex justify-between gap-4 shadow-sm rounded text-lg ${finalized && 'bg-gray-200'} `}>
-                                    <span className="flex justify-start font-raleway-bold text-gray-500 w-full">
-                                        <div className="flex justify-around items-center font-raleway-bold text-gray-500 w-10">
-                                            <input disabled={finalized} type="radio" name="odd" id={`odd${selection.name}`} className="h-full w-full" />
-                                        </div>
-                                        <label htmlFor={`odd${selection.name}`} className={`flex justify-between items-center py-3 px-4 w-full gap-2 ${!finalized ? 'cursor-pointer' : ''}`}>
-                                            <span>{selection.name === '1' ? event.home.name : selection.name === 'x' ? 'Empate' : event.away.name}</span>
-                                            <span>{selection.oddsDecimal}</span>
-                                        </label>
-                                    </span>
-                                </div>
+                                <span key={index}>
+                                    <PlaceBetButton event={ event } selection={ selection } finalized={ finalized } index={ index } userCoins={userCoins} />
+                                </span>
                             ))
                         }
                         {loading && <div>Loading odds...</div>}
                     </form>
+                        {
+                            (!loading && odds?.length === 0) && 
+                            <span className="font-raleway-medium text-sm text-amber-400 w-full rounded border border-gray-200 py-3 px-5 flex gap-2 items-center">
+                                <IoWarningOutline size={14} />
+                                Hubo un problema al cargar las cuotas. Inténtelo de nuevo mas tarde.
+                            </span>
+                        }
                 </div>
 
                 <span className="font-raleway-medium text-sm text-gray-400">Sube de nivel para desbloquear mas opciones</span>
