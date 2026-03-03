@@ -20,6 +20,7 @@ export * from './shadcn/ui/input';
 export * from './shadcn/ui/label';
 export * from './shadcn/ui/separator';
 export * from './shadcn/ui/slider';
+export * from './shadcn/ui/sonner';
 // Profile Menu
 export * from './ui/ProfileMenu/ProfileMenu';
 // Bet

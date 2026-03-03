@@ -5,6 +5,8 @@ import { Providers } from "@/components/providers/Providers";
 import { auth } from "@/auth";
 import { Navbar, ProfileMenu } from "@/components";
 import Image from "next/image";
+import { Toaster } from "@/components"
+
 
 export const metadata: Metadata = {
   title: "PlayAllbet - Apuestas Deportivas",
@@ -32,6 +34,7 @@ export default async function RootLayout({
               <main>{children}</main>
             </div>
           </main>
+          <Toaster />
         </Providers>
       </body>
     </html>
