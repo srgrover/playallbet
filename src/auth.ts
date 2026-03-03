@@ -1,11 +1,11 @@
-
 import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import { createUser, getUserByEmail } from './actions';
-import type { NextAuthConfig } from "next-auth"
- 
+import type { NextAuthConfig } from 'next-auth';
+
 export const config = {
+  trustHost: true,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -16,63 +16,43 @@ export const config = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
   ],
+  
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) { // user is only available on first sign in
-        try {
-          const responseUser = await getUserByEmail(user);
-
-          if (responseUser.ok && responseUser.user) {
-            token.id = responseUser.user.id;
-          }
-        } catch (error) {
-            console.error('Error adding id to token: ', error)
-        }
+    async signIn({ user, profile }) {
+      const email = user?.email ?? profile?.email;
+  
+      if (!email) {
+        console.error('No email in user/profile');
+        return false; // único caso en el que bloqueamos
       }
-      return token;
-    },
-
-    async signIn ({user}) {
-      if (!user.email) return false;
-
+  
       try {
-        const responseUser = await getUserByEmail(user)
-        const { ok, user: existingUser } = responseUser;
-
-        if (!ok) return false;
-
-        if (!existingUser) {
-          const createResponse = await createUser(user);
-          const { ok } = createResponse;
-
-          if (!ok) return false;
-          return true;
+        const response = await getUserByEmail(email);
+  
+        // Si hay error de BBDD, LO LOGEAMOS PERO NO BLOQUEAMOS
+        if (!response.ok && response.message !== 'USER_NOT_FOUND') {
+          console.error('DB error (NO BLOQUEO LOGIN):', response.message);
         }
-      } catch (error) {
-        console.error('Error al iniciar sesión: ', error);
-        throw new Error('Error al iniciar sesión.');
+  
+        if (response.user === null) {
+          const created = await createUser({
+            name: user.name ?? profile?.name ?? '',
+            email,
+            image:
+              user.image ??
+              (profile as any)?.picture ??
+              (profile as any)?.avatar_url ??
+              null,
+          });
+        }
+  
+        return true;
+      } catch (err) {
+        console.error('SignIn error (EXCEPTION):', err);
+        return false;
       }
-      return true;
-    },
-
-    async redirect({ url, baseUrl }) {
-      // Permite redirecciones relativas
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
-
-      // Permite redirecciones a otros dominios si vienen en la URL
-      if (new URL(url).origin === baseUrl) return url;
-      
-      // Si no es ninguno de los anteriores (ej. primer login), redirige a dashboard
-      return baseUrl + '/dashboard';
-    },
-
-    async session({ session, token }) {
-      if (session?.user && token.id) {
-        session.user.id = token.id as string;
-      }
-      return session;
     },
   },
-} satisfies NextAuthConfig
+} satisfies NextAuthConfig;
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+export const { handlers, auth, signIn, signOut } = NextAuth(config);

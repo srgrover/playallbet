@@ -18,7 +18,7 @@ export const LoginForm = () => {
         <form className='flex flex-col gap-5 items-center justify-center p-8 border border-gray-200 rounded-lg'>
             <div className='flex flex-col items-center gap-2'>
                 <BiLinkAlt size={55} className='p-3 bg-gray-800 text-white rounded-md' />
-                <h2 className='text-3xl'>Login into slgs</h2>
+                <h2 className='text-3xl font-raleway-bold text-gray-800'>PlayAllBet Login</h2>
                 <p className='text-gray-500'>Log in with your favorite social provider to get started:</p>
             </div>
             <div className='flex flex-col w-full gap-2'>

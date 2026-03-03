@@ -11,7 +11,6 @@ export default async function Home() {
     leagues = data.leagues;
   } else {
     console.error("Failed to fetch events for Home page:", response.status, await response.text());
-    // You can optionally render a fallback UI here
   }
 
   return (

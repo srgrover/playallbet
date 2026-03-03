@@ -120,7 +120,7 @@ export interface AlternateNames {
     isNational: boolean;
   }
   
-  export interface Match {
+  export interface MatchInfo {
     id: string;
     lastUpdate: string;
     startDate: string;

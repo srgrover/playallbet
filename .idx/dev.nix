@@ -34,14 +34,14 @@
       # To run something each time the workspace is (re)started, use the `onStart` hook
     };
     # Enable previews and customize configuration
-    previews = {
-      enable = true;
-      previews = {
-        web = {
-          command = ["bun" "dev" "--" "--port" "$PORT" "--hostname" "0.0.0.0"];
-          manager = "web";
-        };
-      };
-    };
+    # previews = {
+    #   enable = true;
+    #   previews = {
+    #     web = {
+    #       command = ["bun" "dev" "--" "--port" "$PORT" "--hostname" "0.0.0.0"];
+    #       manager = "web";
+    #     };
+    #   };
+    # };
   };
 }

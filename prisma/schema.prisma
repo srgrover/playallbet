@@ -105,8 +105,12 @@ model User {
     name          String?
     email         String?   @unique
     emailVerified DateTime?
-    password      String
+    password      String?
     image         String?
+    coins         Int       @default(4000)
+    experience    Int       @default(0)
+    level         Int       @default(0)
+    createdAt     DateTime  @default(now())
     bets          Bet[]
     accounts      Account[]
     sessions      Session[]

@@ -65,6 +65,13 @@
     border: 3px solid var(--brand-main-color);
     color: var(--brand-main-color);
     cursor: pointer;
+
+    &:disabled {
+        background-color: #ffffff;
+        border: 3px solid #a5a5a5;
+        color: #a5a5a5;
+        cursor: not-allowed;
+    }
 }
 
 

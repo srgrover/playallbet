@@ -1,8 +1,9 @@
 'use client'
 
 import { login } from "@/actions";
-import { BrandButton } from "@/components/ui/brand-button/BrandButton";
+import { Button } from "@/components";
 import { useState } from "react";
+import { BiLoader } from "react-icons/bi";
 
 interface Props {
     provider: string;
@@ -17,12 +18,15 @@ export const ButtonProvider = ({ provider, icon }: Props) => {
         await login(provider)
     }
 
-    console.log('PROVIDER',provider)
-
     return (
-        <BrandButton
-            text={`Continue with ${provider.toWellFormed() }`}
-            disabled={ loading }
-        />
+        <Button
+            color="blue"
+            variant="default"
+            size="sm"
+            onClick={ async() => { await tryToLogin() } }
+            type="button">
+            { !loading ? icon : <BiLoader size={20} className="animate-spin" /> }
+            Continue with { provider.toWellFormed() }
+        </Button>
     )
 }
