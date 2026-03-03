@@ -1,27 +1,38 @@
 'use server';
 
 import prisma from "@/lib/prisma";
-import { User } from "next-auth";
 
-export const createUser = async (user: User) => {
-  if (!user) {
+interface CreateUserParams {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
+
+export const createUser = async (userData: CreateUserParams) => {
+  if (!userData.email) {
     return {
       ok: false,
-      message: "There is no user to create.",
+      message: "El correo electrónico es obligatorio para crear un usuario.",
     };
   }
 
-  const userCreated = await prisma.user.create({
-    data: {
-      email: user.email,
-      name: user.name,
-      image: user.image,
-      password: ''
-    }
-  });
+  try {
+    const userCreated = await prisma.user.create({
+      data: {
+        email: userData.email,
+        name: userData.name ?? '',
+        image: userData.image ?? '',
+      },
+    });
 
-  return {
-    ok: true,
-    user: userCreated
+    return {
+      ok: true,
+      user: userCreated,
+    };
+  } catch (error: any) {
+    return {
+      ok: false,
+      message: `Error al crear el usuario: ${error.message}`,
+    };
   }
-}
+};
