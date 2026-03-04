@@ -28,8 +28,15 @@ export const placeBet = async (bet: Bet) => {
         }
     }
 
+    if (user.coins < bet.betCoins) {
+        return {
+            ok: false,
+            message: `You don't have enough coins to place this bet. You only have ${user.coins} coins.`,
+        };
+    }
+
     try {
-        console.log(session.user.id)
+        console.log(session.user)
         //TODO: Comprobar si ya tiene una apuesta igual y actualizarla en ese caso. Si no, crear una nueva.
         const newBet = await prisma.bet.create({
             data: {
@@ -38,7 +45,7 @@ export const placeBet = async (bet: Bet) => {
             }
         });
 
-        await updateUserPendingCoins(newBet.betCoins)
+        await updateUserPendingCoins(user.pendingCoins + newBet.betCoins)
         await updateUserCoins(user.coins - newBet.betCoins)
 
         revalidatePath('/');

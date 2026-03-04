@@ -62,16 +62,16 @@ export function PlaceBetDialog({ event, selection, userCoins, handleSetOpen }: P
             console.error(message);
             toast.error("Error trying to place bet", {
                 description: message,
-                position: "bottom-right"
+                position: "bottom-right",
+                className: "!bg-red-500 !text-white"
             })
             return;
         }
         toast.success("Your bet has been placed successfully. Good luck!", {
-            position: "bottom-right"
+            position: "bottom-right",
+            className: "!bg-green-500 !text-white"
         })
         handleSetOpen(false);
-
-        // TODO: Comprobar userID al hacer placeBet 
     }
 
     return (

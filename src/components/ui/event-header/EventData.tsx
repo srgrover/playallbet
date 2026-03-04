@@ -30,6 +30,8 @@ export const EventData = ({ eventId }: Props) => {
     const event = useEventStore(state => state.getEventById(parseInt(eventId.toString())));
     const eventLeagueFromStore = useEventStore(state => state.getLeagueByMatchId(parseInt(eventId.toString())));
 
+
+    
     useEffect(() => {
         setHasMounted(true);
     }, []);

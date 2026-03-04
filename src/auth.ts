@@ -23,13 +23,12 @@ export const config = {
   
       if (!email) {
         console.error('No email in user/profile');
-        return false; // único caso en el que bloqueamos
+        return false;
       }
   
       try {
         const response = await getUserByEmail(email);
   
-        // Si hay error de BBDD, LO LOGEAMOS PERO NO BLOQUEAMOS
         if (!response.ok && response.message !== 'USER_NOT_FOUND') {
           console.error('DB error (NO BLOQUEO LOGIN):', response.message);
         }
@@ -44,6 +43,11 @@ export const config = {
               (profile as any)?.avatar_url ??
               null,
           });
+
+          if (!created.ok) {
+            console.error('DB error creating user:', created.message);
+            return false;
+          }
         }
   
         return true;
@@ -51,6 +55,28 @@ export const config = {
         console.error('SignIn error (EXCEPTION):', err);
         return false;
       }
+    },
+
+    async jwt({ token, user }) {
+      if (user) { // user is only available on first sign in
+        try {
+          const responseUser = await getUserByEmail(user.email!);
+
+          if (responseUser.ok && responseUser.user) {
+            token.id = responseUser.user.id;
+          }
+        } catch (error) {
+            console.error('Error adding id to token: ', error)
+        }
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session?.user && token.id) {
+        session.user.id = token.id as string;
+      }
+      return session;
     },
   },
 } satisfies NextAuthConfig;
