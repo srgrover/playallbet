@@ -5,6 +5,7 @@ export interface User {
   email?: string | null;
   image?: string | null;
   coins: number;
+  pendingCoins: number;
   experience: number;
   level: number;
 }

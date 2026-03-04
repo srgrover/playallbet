@@ -21,9 +21,15 @@ export * from './shadcn/ui/label';
 export * from './shadcn/ui/separator';
 export * from './shadcn/ui/slider';
 export * from './shadcn/ui/sonner';
+export * from './shadcn/ui/sidebar';
+export * from './shadcn/ui/card';
+export * from './shadcn/ui/avatar';
+export * from './shadcn/ui/badge';
 // Profile Menu
 export * from './ui/ProfileMenu/ProfileMenu';
 // Bet
 export * from './ui/bet-range/BetRange';
 export * from './ui/place-bet-dialog/PlaceBetDialog';
 export * from './ui/place-bet-button/PlaceBetButton';
+// Widgets
+export * from './ui/events-widget/EventsWidget';

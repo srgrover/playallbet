@@ -1,25 +1,31 @@
-import { LeagueList } from "@/components";
-import { getEvents } from "@/lib/data-fetching";
-import { RootLeaguesResponse, League } from "@/interfaces";
+import { EventsWidget } from "@/components";
+import { auth } from "@/auth";
+import { getUserByEmail } from "@/actions";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
+import { IoFlagSharp } from "react-icons/io5";
 
 export default async function Home() {
-  const response = await getEvents();
-  let leagues: League[] = [];
+  const session = await auth();
+  if (!session || !session.user) redirect('/auth/login');
+  const { user, ok, message } = await getUserByEmail(session?.user?.email || '')
 
-  if (response.ok) {
-    const data: RootLeaguesResponse = await response.json();
-    leagues = data.leagues;
-  } else {
-    console.error("Failed to fetch events for Home page:", response.status, await response.text());
-  }
+  if (!ok) {
+    console.error(message);
+    toast.error("Error trying get user", {
+        description: message,
+        position: "bottom-right"
+    })
+    redirect('/auth/login');
+}
 
   return (
-    <div className="min-h-screen p-8">
-      <h1 className="text-5xl font-bold text-center mb-12 text-primary">
-        Demuestra cuánto sabes de deporte
+    <div className="min-h-screen p-8 flex flex-col gap-5">
+      <h1 className="text-3xl font-raleway-medium text-[#1799db]">
+        Hola, { user?.email }
       </h1>
-      <div className="grid grid-cols-1 gap-8">
-        <LeagueList initialLeagues={leagues} />
+      <div className="grid grid-cols-1 gap-8 rounded-sm shadow-sm border border-slate-200">
+        <EventsWidget title={'Próximos eventos'} limit={10} titleIcon={<IoFlagSharp size={17} className="text-[#1799db]" />} />
       </div>
     </div>
   );

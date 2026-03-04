@@ -4,7 +4,7 @@ import { devtools, persist } from "zustand/middleware";
 
 interface State {
   events: League[];
-
+  matchs: Match[]
   getTotalItems: () => number;
   addEventsToStore: (events: League[]) => void;
   getEventById: (id: number) => Match | null;
@@ -16,14 +16,17 @@ export const useEventStore = create<State>()(
     persist(
       (set, get) => ({
         events: [],
+        matchs: [],
 
         getTotalItems: () => {
-          const { events } = get();
-          return events.length
+          const { matchs } = get();
+          return matchs.length
         },
 
         addEventsToStore: (events: League[]) => {
           set({ events: [...events] });
+          const matches = events.map((league) => league.matches).flat();
+          set({ matchs: [...matches] });
         },
 
         getEventById: (id: number) => {

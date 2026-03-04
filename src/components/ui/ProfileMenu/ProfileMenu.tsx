@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { User } from 'next-auth';
 import { getUserByEmail } from '@/actions';
+import { Sidebar, SidebarMenu } from '@/components';
 
 interface Props {
   user: User
@@ -47,6 +48,17 @@ export async function ProfileMenu({ user }: Props) {
       <div className="text-center flex gap-2 font-raleway-bold items-center text-xl">
         <p className="text-green-400 ">{dbUser.coins.toLocaleString('es-ES', { minimumFractionDigits: 0 })}</p>
         <p className="text-[#1e93c2] font-raleway-semibold">Coins</p>
+      </div>
+      {
+        (dbUser.pendingCoins && dbUser.pendingCoins > 0) &&
+        <div className="text-center flex gap-2 font-raleway-bold items-center text-xl">
+          <p className="text-orange-400 ">{dbUser.pendingCoins.toLocaleString('es-ES', { minimumFractionDigits: 0 })}</p>
+          <p className="text-[#1e93c2] font-raleway-semibold text-sm">Coins pendientes</p>
+        </div>
+      }
+
+      <div>
+      <Link href={'/home'} >Home</Link>
       </div>
     </div>
   );

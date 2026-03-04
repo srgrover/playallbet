@@ -70,6 +70,8 @@ export function PlaceBetDialog({ event, selection, userCoins, handleSetOpen }: P
             position: "bottom-right"
         })
         handleSetOpen(false);
+
+        // TODO: Comprobar userID al hacer placeBet 
     }
 
     return (
