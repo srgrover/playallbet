@@ -35,8 +35,8 @@ model Bet {
     // tournament   Tournament? @relation(fields: [tournamentId], references: [id])
     tournamentId Int?
 
-    user   User?   @relation(fields: [userId], references: [id])
-    userId String?
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
 
     statusId Int    @default(0)
     status   Status @relation(fields: [statusId], references: [id])
@@ -106,6 +106,7 @@ model User {
     password      String?
     image         String?
     coins         Int       @default(4000)
+    pendingCoins  Int       @default(0)
     experience    Int       @default(0)
     level         Int       @default(0)
     createdAt     DateTime  @default(now())
