@@ -3,7 +3,8 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage, Badge, Button, Card, CardContent } from '@/components';
 import { Edit, PlusIcon, Settings, Star, Users } from 'lucide-react';
-import { getUserByEmail } from '@/actions';
+import { getUserById } from '@/actions';
+import { TimelineWithIcon } from '@/components/ui/bet-timeline/BetTimeline';
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -12,11 +13,13 @@ export default async function ProfilePage() {
     redirect('/auth/login');
   }
 
-  const {ok, message, user} = await getUserByEmail(session.user.email!);
+  const { ok, message, user } = await getUserById(session.user.id!);
   if (!ok) {
     console.error(message);
     redirect('/auth/login');
   }
+
+  console.log({user})
 
   return (
     <div className="w-full px-4 py-6 md:px-6">
@@ -47,9 +50,9 @@ export default async function ProfilePage() {
                   />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
-                <h2 className="mt-4 text-lg font-semibold">{ user?.name }</h2>
+                <h2 className="mt-4 text-lg font-semibold">{user?.name}</h2>
                 <p className="text-muted-foreground text-sm">
-                { user?.email }
+                  {user?.email}
                 </p>
                 <Badge variant="secondary">Lvl {user?.level}</Badge>
                 <Button className="mt-4 w-full" size="sm">
@@ -70,6 +73,21 @@ export default async function ProfilePage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Role</span>
                   <span>Admin</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="p-0">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="bg-primary/10 rounded-lg p-2">
+                  <Star className="text-primary size-5" />
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold">128</p>
+                  <p className="text-muted-foreground text-sm">
+                    Bets
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -131,26 +149,7 @@ export default async function ProfilePage() {
           <Card className="p-0">
             <CardContent className="p-6">
               <h3 className="mb-4 text-lg font-semibold">Recent Activity</h3>
-              <div className="space-y-4">
-                {[1, 2, 3].map((_, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-4 border-b pb-4 last:border-0"
-                  >
-                    <div className="bg-muted rounded-full p-2">
-                      <Star className="text-muted-foreground size-4" />
-                    </div>
-                    <div>
-                      <p className="text-sm">
-                        Completed project &quot;Dashboard UI&quot;
-                      </p>
-                      <p className="text-muted-foreground text-xs">
-                        2 hours ago
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <TimelineWithIcon userBets={user?.bets ?? []} />
             </CardContent>
           </Card>
         </div>

@@ -13,7 +13,8 @@ import { FaArrowLeft, FaTrophy } from 'react-icons/fa6';
 import { IoWarningOutline } from 'react-icons/io5';
 import { PlaceBetButton } from '../place-bet-button/PlaceBetButton';
 import { useSession } from 'next-auth/react';
-import { getUserByEmail } from '@/actions';
+import { getBetByMatchIdAndUserId, getUserByEmail } from '@/actions';
+import { Bet } from '@/interfaces';
 
 interface Props {
     eventId: number
@@ -25,13 +26,12 @@ export const EventData = ({ eventId }: Props) => {
     const [loading, setLoading] = useState(true);
     const [finalized, setFinalized] = useState(false);
     const [userCoins, setUserCoins] = useState(0);
+    const [eventBet, setEventBet] = useState<Bet | null>(null);
 
     const { data: session } = useSession();
     const event = useEventStore(state => state.getEventById(parseInt(eventId.toString())));
     const eventLeagueFromStore = useEventStore(state => state.getLeagueByMatchId(parseInt(eventId.toString())));
 
-
-    
     useEffect(() => {
         setHasMounted(true);
     }, []);
@@ -59,8 +59,17 @@ export const EventData = ({ eventId }: Props) => {
             }
         };
 
+        const getUserBets = async () => {
+            const {ok, message, bet} = await getBetByMatchIdAndUserId(event?.id!);
+            if(ok && bet) setEventBet(bet);
+
+            console.log({bet})
+            console.log({eventBet})
+        }
+
         if (eventId && hasMounted) {
             fetchOdds();
+            getUserBets();
         }
     }, [eventId, hasMounted]);
 
@@ -153,7 +162,7 @@ export const EventData = ({ eventId }: Props) => {
                         {
                             !loading && odds?.map((selection: any, index: number) => (
                                 <span key={index}>
-                                    <PlaceBetButton event={ event } selection={ selection } finalized={ finalized } index={ index } userCoins={userCoins} />
+                                    <PlaceBetButton event={ event } selection={ selection } finalized={ finalized } index={ index } userCoins={userCoins} userBet={eventBet} />
                                 </span>
                             ))
                         }

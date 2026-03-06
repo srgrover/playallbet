@@ -9,3 +9,5 @@ export * from './user/update-user-coins.action'
 export * from './user/update-user-pending-coins.action'
 // Bet
 export * from './bet/place-bet.action'
+export * from './bet/get-bet-by-match-id-and-user.action'
+export * from './bet/get-bets-by-match-ids-list-and-user.action'

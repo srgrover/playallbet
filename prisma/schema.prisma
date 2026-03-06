@@ -56,6 +56,18 @@ model Team {
     // awayBets  Bet[] @relation("AwayBets")
 }
 
+model Match {
+    id          Int     @id
+    abbName     String?
+    fullName    String?
+    country     String?
+    countryName String?
+    imageUrl    String?
+
+    // localBets Bet[] @relation("LocalBets")
+    // awayBets  Bet[] @relation("AwayBets")
+}
+
 model Tournament {
     id         Int     @id
     name       String?

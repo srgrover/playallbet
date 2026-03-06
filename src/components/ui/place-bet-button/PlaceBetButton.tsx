@@ -6,7 +6,7 @@ import {
     Dialog,
     DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
-import { Selection } from "@/interfaces";
+import { Bet, Selection } from "@/interfaces";
 import { Check } from "lucide-react";
 import { PlaceBetDialog } from "../place-bet-dialog/PlaceBetDialog";
 import { useState } from "react";
@@ -17,9 +17,11 @@ interface Props {
     finalized: boolean,
     index: number,
     userCoins: number;
+    userBet?: Bet | null
 }
 
-export function PlaceBetButton({ event, selection, finalized, index, userCoins }: Props) {
+export function PlaceBetButton({ event, selection, finalized, index, userCoins, userBet }: Props) {
+    console.log({userBet})
     const eventResult: string | null = finalized ? event.home.score > event.away.score ? '1' : event.home.score < event.away.score ? '2' : 'X' : null; 
     const [open, setOpen] = useState(false);
 

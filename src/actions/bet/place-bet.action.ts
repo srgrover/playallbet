@@ -50,6 +50,7 @@ export const placeBet = async (bet: Bet) => {
 
         revalidatePath('/');
         revalidatePath('/profile');
+        revalidatePath('/event/[id]');
 
         return {
             ok: true,
