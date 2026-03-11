@@ -42,7 +42,7 @@ export const EventHeaderInfo = ({ eventId }: Props) => {
                     if (response.ok) {
                         const data = await response.json();
                         await setEvent(data.event);
-                        setFinalized(event?.status.code === 100);
+                        setFinalized(data.event?.status.code === 100);
                         // Aquí puedes procesar los datos recibidos
                         console.log('desde event', event?.status.code)
                         console.log('desde finalized', finalized)
@@ -102,6 +102,10 @@ export const EventHeaderInfo = ({ eventId }: Props) => {
 
         fetchUserCoins();
     }, [session]);
+
+    const handleBetPlaced = (newBet: Bet) => {
+        setEventBet(newBet);
+    };
 
     if (!hasMounted) {
         return (
@@ -186,7 +190,15 @@ export const EventHeaderInfo = ({ eventId }: Props) => {
                         {
                             !loading && odds?.map((selection: any, index: number) => (
                                 <span key={index}>
-                                    <PlaceBetButton event={event} selection={selection} finalized={event.status.code === 100} index={index} userCoins={userCoins} userBet={eventBet} />
+                                    <PlaceBetButton
+                                        event={event}
+                                        selection={selection}
+                                        finalized={event.status.code === 100}
+                                        index={index}
+                                        userCoins={userCoins}
+                                        userBet={eventBet}
+                                        onBetPlaced={handleBetPlaced} // Pass the handler function
+                                    />
                                 </span>
                             ))
                         }

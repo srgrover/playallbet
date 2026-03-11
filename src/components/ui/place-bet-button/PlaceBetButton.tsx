@@ -18,23 +18,17 @@ interface Props {
     index: number,
     userCoins: number;
     userBet?: Bet | null
+    onBetPlaced: (newBet: Bet) => void; // Add this line
 }
 
-export function PlaceBetButton({ event, selection, finalized, index, userCoins, userBet }: Props) {
+export function PlaceBetButton({ event, selection, finalized, index, userCoins, userBet, onBetPlaced }: Props) {
     const eventResult: string | null = finalized ? event.homeScore.display > event.awayScore.display ? '1' : event.homeScore.display < event.awayScore.display ? '2' : 'X' : null;
     const [open, setOpen] = useState(false);
-    const [userBetState, setuserBet] = useState<Bet | null>(userBet ?? null);
 
     console.log({ userBet })
 
-    useEffect(() => {
-        if (userBet) {
-            setuserBet(userBet)
-        }
-    }, []);
-
     const handlePlaceBet = (newBet: Bet) => {
-        // setuserBet(newBet);
+        onBetPlaced(newBet); // Call the handler from the parent
         setOpen(false);
     }
 
@@ -51,7 +45,7 @@ export function PlaceBetButton({ event, selection, finalized, index, userCoins, 
                     `}
                     style={{ paddingTop: '30px', paddingBottom: '30px', 
                     border: `${eventResult && eventResult === selection.name.toUpperCase() ? '3px solid #99D15C' : ''}`,
-                    color: `${userBetState && userBetState.prediction.toUpperCase() === selection.name.toUpperCase() ? '#ffffff !important' : 'initial'}` }}>
+                    color: `${userBet && userBet.prediction.toUpperCase() === selection.name.toUpperCase() ? '#ffffff !important' : 'initial'}` }}>
                     <div className={`col-span-1 w-full flex justify-between gap-4 text-lg `}>
                         <span className="flex justify-start font-raleway-bold text-gray-500 w-full">
                             <div className="flex justify-around items-center font-raleway-bold text-gray-500 w-10">
@@ -64,14 +58,14 @@ export function PlaceBetButton({ event, selection, finalized, index, userCoins, 
                                     }
 
                                     {
-                                        (userBetState || userBet) && (userBetState?.prediction.toUpperCase() === selection.name.toUpperCase() || userBet?.prediction.toUpperCase() === selection.name.toUpperCase()) &&
+                                        (userBet) && (userBet?.prediction.toUpperCase() === selection.name.toUpperCase()) &&
                                         <span className="rounded-full h-8 w-8 border-0 bg-[#1b87b3] flex justify-center items-center">
                                             <Check size={24} color="#FFFFFF" />
                                         </span>
                                     }
                                 </span>
                             </div>
-                            <label className={`flex justify-between items-center py-3 px-4 w-full gap-2 ${(userBetState || userBet) && (userBetState?.prediction.toUpperCase() === selection.name.toUpperCase() || userBet?.prediction.toUpperCase() === selection.name.toUpperCase()) ? '!text-white' : ''} ${!finalized ? 'cursor-pointer' : ''}`}>
+                            <label className={`flex justify-between items-center py-3 px-4 w-full gap-2 ${userBet && (userBet?.prediction.toUpperCase() === selection.name.toUpperCase()) ? '!text-white' : ''} ${!finalized ? 'cursor-pointer' : ''}`}>
                                 <span>{selection.name === '1' ? event.homeTeam.name : selection.name.toUpperCase() === 'X' ? 'Empate' : event.awayTeam.name}</span>
                                 <span>{result.toFixed(2)}</span>
                             </label>

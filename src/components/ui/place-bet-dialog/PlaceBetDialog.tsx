@@ -61,7 +61,7 @@ export function PlaceBetDialog({ event, selection, userCoins, handlePlaceBet }: 
         }
         const { ok, newBet, message } = await placeBet(bet);
 
-        if (!ok) {
+        if (!ok || !newBet) {
             console.error(message);
             toast.error("Error trying to place bet", {
                 description: message,
@@ -75,7 +75,7 @@ export function PlaceBetDialog({ event, selection, userCoins, handlePlaceBet }: 
             className: "!bg-green-500 !text-white"
         });
         console.log({newBet})
-        if (newBet) handlePlaceBet(newBet);
+        handlePlaceBet(newBet);
     }
 
     return (
@@ -104,8 +104,4 @@ export function PlaceBetDialog({ event, selection, userCoins, handlePlaceBet }: 
             </DialogFooter>
         </DialogContent>
     );
-}
-
-function handlePlaceBet(newBet: { id: string; createdAt: Date; matchId: number; prediction: string; localTeamId: number | null; awayTeamId: number | null; winner: number | null; betCoins: number; betProfits: number; updatedAt: Date; tournamentId: number | null; userId: string; statusId: number; } | undefined) {
-    throw new Error("Function not implemented.");
 }
