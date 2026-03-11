@@ -32,6 +32,12 @@ const nextConfig = {
         port: '',
         pathname: '/a/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.sofascore.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

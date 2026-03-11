@@ -11,37 +11,40 @@ import {
 import { Field, FieldGroup } from "@/components/shadcn/ui/field";
 import { Input } from "@/components/shadcn/ui/input";
 import { Label } from "@/components/shadcn/ui/label";
-import { Bet, Match, Selection } from "@/interfaces";
+import { Bet, Choice, Event } from "@/interfaces";
 import { BetRange } from "../bet-range/BetRange";
 import { useState } from "react";
 import { placeBet } from "@/actions";
 import { toast } from "sonner";
 
 interface Props {
-    event: Match,
-    selection: Selection,
+    event: Event,
+    selection: Choice,
     userCoins: number;
-    handleSetOpen: (state: boolean) => void;
+    handlePlaceBet: (newBet: Bet) => void;
 }
 
-export function PlaceBetDialog({ event, selection, userCoins, handleSetOpen }: Props) {
+export function PlaceBetDialog({ event, selection, userCoins, handlePlaceBet }: Props) {
+    const [numerator, denominator] = selection.fractionalValue.split('/').map(Number);
+    const oddsDecimal = ((numerator / denominator) + 1);
+
     const minValue = 100;
     const [quantity, setQuantity] = useState(100);
-    const [gains, setGains] = useState(Math.round(parseFloat(selection.oddsDecimal) * quantity));
+    const [gains, setGains] = useState(Math.round(oddsDecimal * quantity));
 
     const updateQuantity = (newQuantity: number) => {
         if (newQuantity < minValue) {
             setQuantity(minValue);
-            setGains(Math.round(parseFloat(selection.oddsDecimal) * minValue))
+            setGains(Math.round(oddsDecimal * minValue))
             return;
         }
 
         if (newQuantity > userCoins) {
             setQuantity(userCoins);
-            setGains(Math.round(parseFloat(selection.oddsDecimal) * userCoins))
+            setGains(Math.round(oddsDecimal * userCoins))
             return;
         }
-        setGains(Math.round(parseFloat(selection.oddsDecimal) * newQuantity))
+        setGains(Math.round(oddsDecimal * newQuantity))
         setQuantity(newQuantity);
     }
 
@@ -51,12 +54,12 @@ export function PlaceBetDialog({ event, selection, userCoins, handleSetOpen }: P
             prediction: selection.name.toUpperCase(),
             betCoins: quantity,
             betProfits: gains,
-            localTeamId: event.home.id,
-            awayTeamId: event.away.id,
+            localTeamId: event.homeTeam.id,
+            awayTeamId: event.awayTeam.id,
             winner: null,
-            tournamentId: event.leagueId,
+            tournamentId: event.tournament.id,
         }
-        const { ok, message } = await placeBet(bet);
+        const { ok, newBet, message } = await placeBet(bet);
 
         if (!ok) {
             console.error(message);
@@ -70,16 +73,17 @@ export function PlaceBetDialog({ event, selection, userCoins, handleSetOpen }: P
         toast.success("Your bet has been placed successfully. Good luck!", {
             position: "bottom-right",
             className: "!bg-green-500 !text-white"
-        })
-        handleSetOpen(false);
+        });
+        console.log({newBet})
+        if (newBet) handlePlaceBet(newBet);
     }
 
     return (
         <DialogContent className="sm:max-w-sm p-0 border-0">
             <DialogHeader className="p-5 bg-[#99D15C] rounded-t-lg">
-                <DialogTitle className="text-center font-raleway-black shadow-xs text-2xl text-white">{selection.name === '1' ? event.home.name : selection.name === 'x' ? 'Empate' : event.away.name}</DialogTitle>
+                <DialogTitle className="text-center font-raleway-black shadow-xs text-2xl text-white">{selection.name === '1' ? event.homeTeam.name : selection.name === 'x' ? 'Empate' : event.awayTeam.name}</DialogTitle>
                 <DialogDescription className="text-center font-raleway-bold shadow-xs text-white">
-                    Cuota: {selection.oddsDecimal}
+                    Cuota: {oddsDecimal.toFixed(2)}
                 </DialogDescription>
             </DialogHeader>
             <FieldGroup className="p-5">
@@ -100,4 +104,8 @@ export function PlaceBetDialog({ event, selection, userCoins, handleSetOpen }: P
             </DialogFooter>
         </DialogContent>
     );
+}
+
+function handlePlaceBet(newBet: { id: string; createdAt: Date; matchId: number; prediction: string; localTeamId: number | null; awayTeamId: number | null; winner: number | null; betCoins: number; betProfits: number; updatedAt: Date; tournamentId: number | null; userId: string; statusId: number; } | undefined) {
+    throw new Error("Function not implemented.");
 }

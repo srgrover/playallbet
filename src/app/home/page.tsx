@@ -21,9 +21,9 @@ export default async function Home() {
   }
 
   // In your React component or page
-  const response = await fetch(getApiUrl('/api/sofascore'));
-  const data = await response.json();
-  console.log('SOFASCORE DATA',data)
+  // const response = await fetch(getApiUrl('/api/sofascore'));
+  // const data = await response.json();
+  // console.log('SOFASCORE DATA',data)
 
   return (
     <div className="min-h-screen p-8 flex flex-col gap-5">

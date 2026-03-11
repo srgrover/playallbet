@@ -21,7 +21,7 @@ export const getBetByMatchIdAndUserId = async (matchId: number, userId?: string 
     }
 
     const bet = await prisma.bet.findUnique({
-      where: { matchId, userId: userId ?? session.user.id }
+      where: { matchId: parseInt(matchId.toString()), userId: userId ?? session.user.id }
     });
 
     if (!bet) {

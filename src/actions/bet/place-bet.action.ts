@@ -36,7 +36,6 @@ export const placeBet = async (bet: Bet) => {
     }
 
     try {
-        console.log(session.user)
         //TODO: Comprobar si ya tiene una apuesta igual y actualizarla en ese caso. Si no, crear una nueva.
         const newBet = await prisma.bet.create({
             data: {
@@ -45,16 +44,19 @@ export const placeBet = async (bet: Bet) => {
             }
         });
 
+        console.log({newBet});
+
         await updateUserPendingCoins(user.pendingCoins + newBet.betCoins)
         await updateUserCoins(user.coins - newBet.betCoins)
 
         revalidatePath('/');
         revalidatePath('/profile');
-        revalidatePath('/event/[id]');
+        revalidatePath('/eventsc');
+        revalidatePath('/eventsc/[id]');
 
         return {
             ok: true,
-            user: newBet,
+            newBet,
         };
     } catch (error: any) {
         return {

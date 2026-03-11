@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 
-export async function GET() {
-  const url = 'https://www.sofascore.com/api/v1/odds/1/featured-events-by-popularity/football';
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
 
+  if (!id) {
+    return NextResponse.json({ error: 'Event ID is required' }, { status: 400 });
+  }
+
+  const url = `https://www.sofascore.com/api/v1/event/${id}`;
   const headers = {
     'accept': '*/*',
     'accept-encoding': 'gzip, deflate, br, zstd',
