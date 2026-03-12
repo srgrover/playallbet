@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 
-export const getBetByMatchIdAndUserId = async (matchId: number, userId?: string | null) => {
+export const getBetsByUserId = async (limit?: number | null, userId?: string | null) => {
   try {
     const session = await auth();
     if (!session?.user) {
@@ -13,17 +13,10 @@ export const getBetByMatchIdAndUserId = async (matchId: number, userId?: string 
       };
     }
 
-    if (!matchId) {
-      return {
-        ok: false,
-        message: "MatchId is required to compare",
-      };
-    }
-
-    const bet = await prisma.bet.findFirst({
-      where: { 
-        matchId: parseInt(matchId.toString()), 
-        userId: userId ?? session.user.id 
+  
+    const bets = await prisma.bet.findMany({
+      where: {
+        userId: userId ?? session.user.id,
       },
       include: {
         match: {
@@ -31,24 +24,26 @@ export const getBetByMatchIdAndUserId = async (matchId: number, userId?: string 
             homeTeam: true,
             awayTeam: true
           }
-        },
-        user: true,
-        status: true,
-        Tags: true,
-      }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: limit ?? 10
     });
+    
 
-    if (!bet) {
+    if (!bets) {
       return {
         ok: true,
         bet: null,
-        message: 'USER_NOT_FOUND'
+        message: 'BETS_NOT_FOUND'
       };
     }
 
     return {
       ok: true,
-      bet
+      bets
     }
   } catch (err: any) {
     return {

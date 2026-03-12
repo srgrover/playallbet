@@ -8,9 +8,14 @@ import {
     TimelineItem,
     TimelineSeparator,
     EmptyComponent,
-    Button
+    Button,
+    Card,
+    Avatar,
+    AvatarImage,
+    AvatarFallback
 } from "@/components"
 import { Bet } from "@/interfaces";
+import { getEventTimestampFormat } from "@/app/utils";
 
 interface Props {
     userBets: Bet[];
@@ -32,74 +37,41 @@ export async function TimelineWithIcon({ userBets }: Props) {
         <Timeline color="secondary" orientation="vertical">
             {
                 userBets.map(bet => {
+                    const homeTeam = bet.match.homeTeam;
+                    const awayTeam = bet.match.awayTeam;
 
                     return (
-                        <TimelineItem>
-                        <TimelineHeader>
-                            <TimelineSeparator />
-                            <TimelineIcon>
-                                <Ghost className="h-4 w-4" />
-                            </TimelineIcon>
-                        </TimelineHeader>
-                        <TimelineBody className="-translate-y-1.5">
-                            <div className="space-y-1">
-                                <h3 className="text-base leading-none font-semibold">
-                                    Office Setup Complete
-                                </h3>
-                                <p className="text-muted-foreground text-xs">February 8, 2024</p>
-                            </div>
-                            <p className="text-muted-foreground mt-3 text-sm">
-                                Successfully established the new office location with all necessary
-                                equipment and infrastructure in place. The team is ready to begin
-                                operations.
-                            </p>
-                        </TimelineBody>
-                    </TimelineItem>
+                        <TimelineItem key={bet.id}>
+                            <TimelineHeader>
+                                <TimelineSeparator />
+                                <TimelineIcon>
+                                    <Ghost className="h-4 w-4" />
+                                </TimelineIcon>
+                                <span className="text-xs">
+                                    {bet.createdAt.toDateString()}
+                                </span>
+                            </TimelineHeader>
+                            <TimelineBody className="-translate-y-1.5 ml-4 pl-4">
+                                <Card className="mt-2 p-4">
+                                    <div className="flex justify-start gap-3 items-center">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-bold text-sm">{homeTeam?.name}</span>
+                                        </div>
+                                        <span className="text-xs text-muted-foreground">-</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-bold text-sm">{awayTeam?.name}</span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4">
+                                        <p className="text-sm">Bet for: <span className="font-bold">{bet.prediction === '1' ? homeTeam?.name : bet.prediction === '2' ? awayTeam?.name : 'Draw'}</span></p>
+                                        <p className="text-sm">Bet amount: <span className="font-bold">{bet.betCoins}</span> coins</p>
+                                    </div>
+                                </Card>
+                            </TimelineBody>
+                        </TimelineItem>
                     )
                 })
             }
-
-            {/* <TimelineItem>
-                <TimelineHeader>
-                    <TimelineSeparator />
-                    <TimelineIcon>
-                        <Bell className="h-4 w-4" />
-                    </TimelineIcon>
-                </TimelineHeader>
-                <TimelineBody className="-translate-y-1.5">
-                    <div className="space-y-1">
-                        <h3 className="text-base leading-none font-semibold">
-                            Team Announcement
-                        </h3>
-                        <p className="text-muted-foreground text-xs">April 12, 2024</p>
-                    </div>
-                    <p className="text-muted-foreground mt-3 text-sm">
-                        Announced the expansion of our team with five new members joining
-                        across different departments. This strengthens our capabilities and
-                        accelerates growth.
-                    </p>
-                </TimelineBody>
-            </TimelineItem>
-            <TimelineItem>
-                <TimelineHeader>
-                    <TimelineIcon>
-                        <DollarSign className="h-4 w-4" />
-                    </TimelineIcon>
-                </TimelineHeader>
-                <TimelineBody className="-translate-y-1.5">
-                    <div className="space-y-1">
-                        <h3 className="text-base leading-none font-semibold">
-                            Funding Secured
-                        </h3>
-                        <p className="text-muted-foreground text-xs">May 30, 2024</p>
-                    </div>
-                    <p className="text-muted-foreground mt-3 text-sm">
-                        Successfully secured Series A funding of $5M from leading investors.
-                        This milestone enables us to scale operations and accelerate product
-                        development.
-                    </p>
-                </TimelineBody>
-            </TimelineItem> */}
         </Timeline>
     )
 }

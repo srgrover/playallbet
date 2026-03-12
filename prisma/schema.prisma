@@ -16,44 +16,80 @@ generator client {
 
 model Bet {
     id         String @id @default(uuid())
-    matchId    Int    @unique
-    prediction String
+    prediction String // e.g., "home", "away", "draw"
 
-    // localTeam   Team? @relation("LocalBets", fields: [localTeamId], references: [id])
-    localTeamId Int?
-
-    // awayTeam   Team? @relation("AwayBets", fields: [awayTeamId], references: [id])
-    awayTeamId Int?
-
-    winner     Int? @default(0)
-    betCoins   Int  @default(0)
-    betProfits Int  @default(0)
+    betCoins   Int @default(0)
+    betProfits Int @default(0)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    // tournament   Tournament? @relation(fields: [tournamentId], references: [id])
-    tournamentId Int?
+    // Relation to Match
+    matchId Int
+    match   Match @relation(fields: [matchId], references: [id])
 
+    // Relation to User
     user   User   @relation(fields: [userId], references: [id])
     userId String
 
+    // Relation to Status
     statusId Int    @default(0)
     status   Status @relation(fields: [statusId], references: [id])
 
     Tags Tags[] @relation("SlugBets")
+
+    // A user can only bet once on a single match
+    @@unique([matchId, userId])
 }
 
 model Team {
-    id          Int     @id
-    abbName     String?
-    fullName    String?
-    country     String?
-    countryName String?
-    imageUrl    String?
+    id        Int     @id
+    nameCode  String?
+    name      String?
+    shortName String?
+    national  Boolean @default(false)
+    slug      String?
+    type      Int     @default(0)
 
-    // localBets Bet[] @relation("LocalBets")
-    // awayBets  Bet[] @relation("AwayBets")
+    countryId Int?
+    country   Country? @relation(fields: [countryId], references: [id])
+
+    sportId Int?
+    sport   Sport? @relation(fields: [sportId], references: [id])
+
+    teamColorsId Int?
+    teamColors   TeamColors? @relation(fields: [teamColorsId], references: [id])
+
+    // A team can be a home team in many matches
+    homeMatches Match[] @relation("HomeMatches")
+    // A team can be an away team in many matches
+    awayMatches Match[] @relation("AwayMatches")
+}
+
+model Country {
+    id       Int     @id
+    name     String?
+    slug     String?
+    alpha2   String?
+    alpha3   String?
+    imageUrl String?
+
+    teams Team[]
+}
+
+model Sport {
+    id    Int     @id
+    name  String?
+    slug  String?
+    teams Team[]
+}
+
+model TeamColors {
+    id        Int     @id
+    primary   String?
+    secondary String?
+    text      String?
+    teams     Team[]
 }
 
 model Match {
@@ -64,15 +100,27 @@ model Match {
     countryName String?
     imageUrl    String?
 
-    // localBets Bet[] @relation("LocalBets")
-    // awayBets  Bet[] @relation("AwayBets")
+    // Relation to Home Team
+    homeTeamId Int
+    homeTeam   Team @relation("HomeMatches", fields: [homeTeamId], references: [id])
+
+    // Relation to Away Team
+    awayTeamId Int
+    awayTeam   Team @relation("AwayMatches", fields: [awayTeamId], references: [id])
+
+    // Relation to Tournament
+    tournamentId Int?
+    tournament   Tournament? @relation(fields: [tournamentId], references: [id])
+
+    // A match can have many bets
+    bets Bet[]
 }
 
 model Tournament {
     id         Int     @id
     name       String?
     isNational Boolean @default(false)
-    // bets       Bet[]
+    matches    Match[]
 }
 
 model Status {

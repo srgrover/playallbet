@@ -1,6 +1,6 @@
-import { FeaturedEvent } from "./featured-event.interface";
+import { Event } from "./event.interface";
 
 export interface Sofascore {
-    featuredEvents: FeaturedEvent[]
+    featuredEvents: Event[]
   }
   

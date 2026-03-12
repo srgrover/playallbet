@@ -1,43 +1,32 @@
 
-// import { FeaturedEvent, Sofascore } from "@/interfaces";
-// import { League, MatchData } from "@/interfaces/footmob/footmob.interface";
+import { Event, Team as SofascoreTeam, Tournament as SofascoreTournament } from "@/interfaces/sofascore";
+import { Match, Team, Tournament } from "@prisma/client";
 
-// export const mapSofascoreToFootmob = (sofascoreData: FeaturedEvent): League => {
-//   const league: League = {
-//     id: sofascoreData.tournament.id,
-//     name: sofascoreData.tournament.name,
-//     ccode: sofascoreData.tournament.category.flag,
-//     primaryId: sofascoreData.tournament.uniqueTournament.id,
-//     matches: sofascoreData.events.map((event): MatchData => ({
-//       id: event.id,
-//       leagueId: sofascoreData.tournament.id,
-//       time: event.time.time,
-//       home: {
-//         id: event.homeTeam.id,
-//         score: event.homeScore.current,
-//         name: event.homeTeam.name,
-//       },
-//       away: {
-//         id: event.awayTeam.id,
-//         score: event.awayScore.current,
-//         name: event.awayTeam.name,
-//       },
-//       eliminatedTeamId: null,
-//       statusId: event.status.code,
-//       tournamentStage: sofascoreData.tournament.name,
-//       status: {
-//         cancelled: false,
-//         finished: event.status.type === 'finished',
-//         started: event.status.type === 'inprogress',
-//         startDate: new Date(event.startTimestamp * 1000).toISOString(),
-//         startTime: new Date(event.startTimestamp * 1000).toTimeString(),
-//       },
-//       timeTS: event.startTimestamp,
-//     })),
-//     simpleLeague: true,
-//     internalRank: 1,
-//     liveRank: 1,
-//   };
+export const mapSofascoreToTeam = (sofascoreTeam: SofascoreTeam): Omit<Team, 'countryId' | 'sportId' | 'teamColorsId'> => ({
+  id: sofascoreTeam.id,
+  name: sofascoreTeam.name,
+  nameCode: sofascoreTeam.nameCode,
+  national: sofascoreTeam.national,
+  shortName: sofascoreTeam.shortName,
+  slug: sofascoreTeam.slug,
+  type: sofascoreTeam.type
+});
 
-//   return league;
-// };
+export const mapSofascoreToTournament = (sofascoreTournament: SofascoreTournament): Tournament => ({
+  id: sofascoreTournament.id,
+  name: sofascoreTournament.name,
+  isNational: sofascoreTournament.category.country?.name === 'International',
+});
+
+export const mapSofascoreToMatch = (event: Event): Omit<Match, 'homeTeamId' | 'awayTeamId' | 'tournamentId'> & { homeTeamId: number, awayTeamId: number, tournamentId: number } => ({
+  id: event.id,
+  abbName: `${event.homeTeam.nameCode} vs ${event.awayTeam.nameCode}`,
+  fullName: `${event.homeTeam.name} vs ${event.awayTeam.name}`,
+  country: event.tournament.category.country?.name || null,
+  countryName: event.tournament.category.name,
+  imageUrl: `https://api.sofascore.com/api/v1/event/${event.id}/image`,
+  homeTeamId: event.homeTeam.id,
+  awayTeamId: event.awayTeam.id,
+  tournamentId: event.tournament.id
+});
+

@@ -26,7 +26,7 @@ export function EventsWidgetSC({ title, cols = 2, limit = 10, titleIcon, events 
                 {
                     eventsLimit.map(event => {
                         return (
-                            <Link href={`/eventsc/${event.id}`} key={event.id} className="flex justify-start items-center rounded-sm gap-3">
+                            <Link href={`/event/${event.id}`} key={event.id} className="flex justify-start items-center rounded-sm gap-3">
                                 <div className='rounded-full p-2 overflow-hidden h-11 w-11 bg-slate-300 flex justify-center items-center'>
                                     <Image src={`https://img.sofascore.com/api/v1/unique-tournament/${event.tournament.uniqueTournament.id}/image`} alt={event.tournament.uniqueTournament.name ?? 'tournament'} width="50" height="50" loading="lazy" />
                                 </div>

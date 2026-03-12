@@ -8,10 +8,8 @@ import { updateUserCoins } from "../user/update-user-coins.action";
 import { updateUserPendingCoins } from "../user/update-user-pending-coins.action";
 import { revalidatePath } from "next/cache";
 
-export const placeBet = async (bet: Bet) => {
+export const placeBet = async (bet: any) => {
     const session = await auth();
-    console.log({session})
-
 
     if (!session?.user) {
         return {
@@ -20,8 +18,8 @@ export const placeBet = async (bet: Bet) => {
         };
     }
 
-    const {ok, message, user} = await getUserByEmail(session.user.email!)
-    if(!ok || !user){
+    const { ok, message, user } = await getUserByEmail(session.user.email!)
+    if (!ok || !user) {
         return {
             ok: false,
             message: message ?? 'Error creating bet. About your user.',
@@ -36,15 +34,18 @@ export const placeBet = async (bet: Bet) => {
     }
 
     try {
-        //TODO: Comprobar si ya tiene una apuesta igual y actualizarla en ese caso. Si no, crear una nueva.
-        const newBet = await prisma.bet.create({
-            data: {
-                ...bet,
-                userId: user.id!,
-            }
-        });
+        const data: any = {
+            prediction: bet.prediction,
+            betCoins: bet.betCoins,
+            betProfits: bet.betProfits,
+            matchId: bet.matchId,
+            statusId: bet.statusId,
+            userId: user.id!,
+        }
 
-        console.log({newBet});
+        const newBet = await prisma.bet.create({
+            data
+        });
 
         await updateUserPendingCoins(user.pendingCoins + newBet.betCoins)
         await updateUserCoins(user.coins - newBet.betCoins)

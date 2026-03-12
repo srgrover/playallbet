@@ -19,8 +19,6 @@ export default async function ProfilePage() {
     redirect('/auth/login');
   }
 
-  console.log({user})
-
   return (
     <div className="w-full px-4 py-6 md:px-6">
       <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row">
@@ -105,9 +103,9 @@ export default async function ProfilePage() {
                     <Star className="text-primary size-5" />
                   </div>
                   <div>
-                    <p className="text-2xl font-semibold">128</p>
+                    <p className="text-2xl font-semibold">{user?.bets.length ?? 0}</p>
                     <p className="text-muted-foreground text-sm">
-                      Bets
+                      Bet{user?.bets.length > 1 ? 's': ''}
                     </p>
                   </div>
                 </div>

@@ -32,7 +32,6 @@ export function EventsWidget({ title, cols = 2, limit = 10, titleIcon }: Props) 
                     if (data.leagues) {
                         addEventsToStore(data.leagues);
                     }
-                    console.log({matchs: events})
                 } else {
                     console.error("Failed to fetch events for Home page:", response.status, await response.text());
                 }

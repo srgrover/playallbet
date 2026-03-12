@@ -20,10 +20,19 @@ export default async function Home() {
     redirect('/auth/login');
   }
 
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  if (currentHour >= 2 && currentHour < 6) {
+    const responsew = await fetch(getApiUrl('/api/matches/sync'));
+    const trendingEvents = await responsew.json();
+    console.log(trendingEvents.message)
+  }
+
   // In your React component or page
   const response = await fetch(getApiUrl('/api/sofascore/trending'));
   const data = await response.json();
-  console.log('SOFASCORE DATA',data)
+  // console.log('SOFASCORE DATA',data)
 
   return (
     <div className="min-h-screen p-8 flex flex-col gap-5">

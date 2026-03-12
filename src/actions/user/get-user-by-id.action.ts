@@ -14,7 +14,16 @@ export const getUserById = async (id: string) => {
     const user = await prisma.user.findUnique({
       where: { id },
       include: {
-        bets: true,
+        bets: {
+          include: {
+            match: {
+              include: {
+                homeTeam: true,
+                awayTeam: true
+              }
+            }
+          }
+        }
       }
     });
 
@@ -25,8 +34,6 @@ export const getUserById = async (id: string) => {
         message: 'USER_NOT_FOUND'
       };
     }
-
-    console.log('ACTIOMNS',{user})
   
     return {
       ok: true,

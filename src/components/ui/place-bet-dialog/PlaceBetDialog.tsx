@@ -14,7 +14,7 @@ import { Label } from "@/components/shadcn/ui/label";
 import { Bet, Choice, Event } from "@/interfaces";
 import { BetRange } from "../bet-range/BetRange";
 import { useState } from "react";
-import { placeBet } from "@/actions";
+import { placeBet } from "@/actions/bet/place-bet.action";
 import { toast } from "sonner";
 
 interface Props {
@@ -49,20 +49,16 @@ export function PlaceBetDialog({ event, selection, userCoins, handlePlaceBet }: 
     }
 
     const handleSubmit = async () => {
-        const bet: Bet = {
+        const bet: any = {
             matchId: event.id,
             prediction: selection.name.toUpperCase(),
             betCoins: quantity,
             betProfits: gains,
-            localTeamId: event.homeTeam.id,
-            awayTeamId: event.awayTeam.id,
-            winner: null,
-            tournamentId: event.tournament.id,
+            statusId: 1, // Default status for pending bets
         }
         const { ok, newBet, message } = await placeBet(bet);
 
         if (!ok || !newBet) {
-            console.error(message);
             toast.error("Error trying to place bet", {
                 description: message,
                 position: "bottom-right",
@@ -74,7 +70,6 @@ export function PlaceBetDialog({ event, selection, userCoins, handlePlaceBet }: 
             position: "bottom-right",
             className: "!bg-green-500 !text-white"
         });
-        console.log({newBet})
         handlePlaceBet(newBet);
     }
 
