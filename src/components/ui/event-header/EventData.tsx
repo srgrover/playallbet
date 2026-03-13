@@ -45,7 +45,7 @@ export const EventData = ({ initialEvent, initialOdds, initialUserBet, initialUs
             <div className="w-full min-h-[250px] bg-[#99d15c] p-4 px-8 text-white">
                 <div className="grid grid-cols-1">
                     <div className="flex items-center gap-4">
-                        <Link href="/featured-events" className="border-2 border-white rounded-full font-raleway-bold py-1 px-4 flex items-center gap-2 hover:bg-white hover:text-[#99d15c] transition-colors">
+                        <Link href="/home" className="border-2 border-white rounded-full font-raleway-bold py-1 px-4 flex items-center gap-2 hover:bg-white hover:text-[#99d15c] transition-colors">
                             <FaArrowLeft size={14} />
                             <span>Eventos</span>
                         </Link>

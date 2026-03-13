@@ -42,7 +42,7 @@ export default async function EventPage({ params }: Props) {
   const userBet = await getUserBet(id);
   const userCoins = await getUserCoins();
 
-  return (
+  return (  
     <EventData 
       key={id} 
       initialEvent={event} 

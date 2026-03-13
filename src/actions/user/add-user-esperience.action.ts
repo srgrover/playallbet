@@ -1,10 +1,10 @@
 'use server';
 
 import { auth } from "@/auth";
-import prisma from "@/lib/prisma";
 import { getUserById } from "./get-user-by-id.action";
+import { updateUserExperience } from "./update-user-esperience.action";
 
-export const updateUserExperience = async (xp: number, userId?: string | null) => {
+export const addUserExperience = async (xp: number, userId?: string | null) => {
     const session = await auth();
     if (!session?.user) {
         return {
@@ -21,14 +21,18 @@ export const updateUserExperience = async (xp: number, userId?: string | null) =
     }
 
     try {
-        const level = Math.floor(xp / 100);
-        const userUpdate = await prisma.user.update({
-            data: { 
-                experience: xp, 
-                level: level,
-             },
-            where: { id: userId ?? session.user.id! }
-        });
+        const actualUser = await getUserById(userId ?? session.user.id!);
+        if (!actualUser.ok) {
+            return {
+                ok: false,
+                message: actualUser.message,
+            };
+        }
+
+        const actualXp = actualUser.user?.experience ?? 0;
+        const newXp = actualXp + xp;
+        
+        const userUpdate = await updateUserExperience(newXp, userId ?? session.user.id!)
         
         return {
             ok: true,

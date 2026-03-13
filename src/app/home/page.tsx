@@ -1,10 +1,10 @@
-import { EventsWidget } from "@/components";
 import { auth } from "@/auth";
 import { getUserByEmail } from "@/actions";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { IoFlagSharp } from "react-icons/io5";
 import { getApiUrl } from "../utils/get-api-url";
+import { EventsWidgetSC } from "@/components/ui/events-widget-sc/EventsWidgetSC";
 
 export default async function Home() {
   const session = await auth();
@@ -20,9 +20,18 @@ export default async function Home() {
     redirect('/auth/login');
   }
 
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  if (currentHour >= 2 && currentHour < 6) {
+    const responsew = await fetch(getApiUrl('/api/matches/sync'));
+    const trendingEvents = await responsew.json();
+    console.log(trendingEvents.message)
+  }
+
   // In your React component or page
-  // const response = await fetch(getApiUrl('/api/sofascore'));
-  // const data = await response.json();
+  const response = await fetch(getApiUrl('/api/sofascore/trending'));
+  const data = await response.json();
   // console.log('SOFASCORE DATA',data)
 
   return (
@@ -31,7 +40,7 @@ export default async function Home() {
         Hola, {user?.email}
       </h1>
       <div className="grid grid-cols-1 gap-8 rounded-sm shadow-sm border border-slate-200">
-        <EventsWidget title={'Próximos eventos'} limit={10} titleIcon={<IoFlagSharp size={17} className="text-[#1799db]" />} />
+        <EventsWidgetSC title={'Próximos eventos'} events={data.events} limit={10} titleIcon={<IoFlagSharp size={17} className="text-[#1799db]" />} />
       </div>
     </div>
   );

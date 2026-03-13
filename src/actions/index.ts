@@ -7,6 +7,8 @@ export * from './user/get-user-by-email.action'
 export * from './user/get-user-by-id.action'
 export * from './user/update-user-coins.action'
 export * from './user/update-user-pending-coins.action'
+export * from './user/add-user-esperience.action'
+export * from './user/update-user-esperience.action'
 // Bet
 export * from './bet/place-bet.action'
 export * from './bet/get-bet-by-match-id-and-user.action'

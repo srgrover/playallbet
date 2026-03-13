@@ -15,6 +15,7 @@ export async function GET() {
 
     for (const event of trendingEvents.events) {
       const tournamentData = mapSofascoreToTournament(event.tournament);
+      console.log('Tournament sync', tournamentData)
       await prisma.tournament.upsert({
         where: { id: tournamentData.id },
         update: tournamentData,

@@ -39,10 +39,19 @@ export function PlaceBetButton({ event, selection, finalized, index, userCoins, 
     const isLosingBet = hasUserBetOnThis && finalized && !isWinningOutcome;
 
     const buttonClasses = cn(
-        'w-full', 'flex', 'justify-start', 'text-lg', 'p-0',
+        'w-full', 'flex', 'justify-start', 'text-lg', 'px-3',
         {
-            '!bg-green-500 !text-white': isCorrectBet,
-            '!bg-red-500 !text-white': isLosingBet,
+            '!bg-[#2bb792] !text-white': isCorrectBet,
+            '!bg-[#f67364] !text-white': isLosingBet,
+            '!bg-[#21a4d8] !text-white': hasUserBetOnThis && !finalized,
+        }
+    );
+
+    const iconClasses = cn(
+        'rounded-full', 'overflow-hidden', 'border-2', 'w-7', 'h-7', 'flex', 'justify-center', 'items-center',
+        {
+            '!bg-[#199570] !text-white': isCorrectBet,
+            '!bg-[#cd2222] !text-white': isLosingBet,
             '!bg-[#21a4d8] !text-white': hasUserBetOnThis && !finalized,
         }
     );
@@ -60,15 +69,15 @@ export function PlaceBetButton({ event, selection, finalized, index, userCoins, 
                     <div className="col-span-1 w-full flex justify-between gap-4">
                         <span className="flex justify-start font-raleway-bold w-full">
                             <div className="flex justify-around items-center font-raleway-bold w-10">
-                                <span className="rounded-full overflow-hidden border-2 w-7 h-7 border-gray-200 flex justify-center items-center">
+                                <span className={iconClasses}>
                                     {isCorrectBet &&
-                                        <span className="rounded-full h-7 w-7 border-2 border-[#99D15C] flex justify-center items-center">
-                                            <Check size={24} color="#99D15C" />
+                                        <span className="rounded-full h-7 w-7 border-2 border-[#2bb792] flex justify-center items-center">
+                                            <Check size={24} color="#2bb792" />
                                         </span>
                                     }
                                     {isLosingBet &&
-                                        <span className="rounded-full h-7 w-7 border-2 border-red-500 flex justify-center items-center">
-                                            <X size={24} color="#ef4444" />
+                                        <span className="rounded-full h-7 w-7 border-2 border-[#cd2222] flex justify-center items-center">
+                                            <X size={24} color="#ffffff" />
                                         </span>
                                     }
                                     {(hasUserBetOnThis && !finalized) &&

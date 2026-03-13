@@ -16,6 +16,7 @@ import {
 } from "@/components"
 import { Bet } from "@/interfaces";
 import { getEventTimestampFormat } from "@/app/utils";
+import { IoTennisballOutline } from "react-icons/io5";
 
 interface Props {
     userBets: Bet[];
@@ -33,26 +34,28 @@ export async function TimelineWithIcon({ userBets }: Props) {
         );
     };
 
+    const userBetsFiltered = userBets.filter(bet => bet.match.status.code === 100);
+
+
     return (
         <Timeline color="secondary" orientation="vertical">
             {
-                userBets.map(bet => {
+                userBetsFiltered.map(bet => {
                     const homeTeam = bet.match.homeTeam;
                     const awayTeam = bet.match.awayTeam;
+                    console.log(bet)
+                    const icon = ''
 
                     return (
                         <TimelineItem key={bet.id}>
                             <TimelineHeader>
                                 <TimelineSeparator />
                                 <TimelineIcon>
-                                    <Ghost className="h-4 w-4" />
+                                    <IoTennisballOutline className="h-4 w-4" />
                                 </TimelineIcon>
-                                <span className="text-xs">
-                                    {bet.createdAt.toDateString()}
-                                </span>
                             </TimelineHeader>
-                            <TimelineBody className="-translate-y-1.5 ml-4 pl-4">
-                                <Card className="mt-2 p-4">
+                            <TimelineBody className="">
+                                <Card className="px-4 border-0 shadow-none">
                                     <div className="flex justify-start gap-3 items-center">
                                         <div className="flex items-center gap-2">
                                             <span className="font-bold text-sm">{homeTeam?.name}</span>

@@ -1,16 +1,15 @@
 'use server';
 
 import { auth } from "@/auth";
-import { Bet } from "@/interfaces";
 import prisma from "@/lib/prisma";
-import { getUserByEmail } from "../user/get-user-by-email.action";
 import { updateUserCoins } from "../user/update-user-coins.action";
 import { updateUserPendingCoins } from "../user/update-user-pending-coins.action";
 import { revalidatePath } from "next/cache";
+import { addUserExperience } from "../user/add-user-esperience.action";
+import { getUserById } from "../user/get-user-by-id.action";
 
 export const placeBet = async (bet: any) => {
     const session = await auth();
-
     if (!session?.user) {
         return {
             ok: false,
@@ -18,7 +17,7 @@ export const placeBet = async (bet: any) => {
         };
     }
 
-    const { ok, message, user } = await getUserByEmail(session.user.email!)
+    const { ok, message, user } = await getUserById(session.user.id!)
     if (!ok || !user) {
         return {
             ok: false,
@@ -47,8 +46,9 @@ export const placeBet = async (bet: any) => {
             data
         });
 
-        await updateUserPendingCoins(user.pendingCoins + newBet.betCoins)
-        await updateUserCoins(user.coins - newBet.betCoins)
+        await updateUserPendingCoins(user.pendingCoins + newBet.betCoins);
+        await updateUserCoins(user.coins - newBet.betCoins);
+        await addUserExperience(100, session.user.id);
 
         revalidatePath('/');
         revalidatePath('/profile');
